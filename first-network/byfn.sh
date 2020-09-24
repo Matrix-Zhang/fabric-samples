@@ -191,6 +191,30 @@ function networkUp() {
     sleep 14
   fi
 
+
+  if [ "${CERTIFICATE_AUTHORITIES}" == "true" ]; then
+    . fabric-ca/registerEnroll.sh
+    while :
+      do
+        if [ ! -f "fabric-ca/org1/ca-cert.pem" ]; then
+          sleep 1
+          echo "wait for ca server startd..."
+        else
+          break
+        fi
+      done
+
+      infoln "Create Org1 Identities"
+      createOrg1
+
+      infoln "Create Org2 Identities"
+      createOrg2
+      
+      infoln "Create Orderer Org Identities"
+      createOrderer
+
+  fi
+
   # now run the end to end script
   docker exec cli scripts/script.sh $CHANNEL_NAME $CLI_DELAY $LANGUAGE $CLI_TIMEOUT $VERBOSE $NO_CHAINCODE
   if [ $? -ne 0 ]; then

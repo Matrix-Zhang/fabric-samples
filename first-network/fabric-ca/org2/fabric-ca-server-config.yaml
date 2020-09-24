@@ -37,7 +37,7 @@
 #############################################################################
 
 # Version of config file
-version: 1.4.2-snapshot-92df60a
+version: 1.4.2-gm
 
 # Server's listening port (default: 7054)
 port: 7054
@@ -86,7 +86,7 @@ tls:
 #############################################################################
 ca:
   # Name of this CA
-  name:
+  name: ca1
   # Key file (is only used to import a private key into BCCSP)
   keyfile:
   # Certificate file (default: ca-cert.pem)
@@ -307,19 +307,19 @@ signing:
 #     CA certificates though it can still issue end entity certificates.
 ###########################################################################
 csr:
-   cn: fabric-ca-server
+   cn: ca.org2.example.com
    keyrequest:
      algo: gmsm2
      size: 256
    names:
-      - C: US
-        ST: "North Carolina"
+      - C: CN
+        ST: "Cheng Du"
         L:
-        O: Hyperledger
-        OU: Fabric
+        O: ThoughtWorks
+        OU: Blockchain BU
    hosts:
-     - 980962c404f2
      - localhost
+     - org2.example.com
    ca:
       expiry: 131400h
       pathlength: 1
