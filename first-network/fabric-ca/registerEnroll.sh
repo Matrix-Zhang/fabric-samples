@@ -18,20 +18,7 @@ function createOrg1() {
   fabric-ca-client enroll -u http://admin:adminpw@localhost:7054 --caname ca-org1 ###--tls.certfiles ${PWD}/crypto-config/fabric-ca/org1/tls-cert.pem
   { set +x; } 2>/dev/null
 
-  echo 'NodeOUs:
-  Enable: true
-  ClientOUIdentifier:
-    Certificate: cacerts/localhost-7054-ca-org1.pem
-    OrganizationalUnitIdentifier: client
-  PeerOUIdentifier:
-    Certificate: cacerts/localhost-7054-ca-org1.pem
-    OrganizationalUnitIdentifier: peer
-  AdminOUIdentifier:
-    Certificate: cacerts/localhost-7054-ca-org1.pem
-    OrganizationalUnitIdentifier: admin
-  OrdererOUIdentifier:
-    Certificate: cacerts/localhost-7054-ca-org1.pem
-    OrganizationalUnitIdentifier: orderer' >${PWD}/crypto-config/peerOrganizations/org1.example.com/msp/config.yaml
+
 
   infoln "Register peer0"
   set -x
@@ -42,7 +29,7 @@ function createOrg1() {
   set -x
   fabric-ca-client register --caname ca-org1 --id.name user1 --id.secret user1pw --id.type client ###--tls.certfiles ${PWD}/crypto-config/fabric-ca/org1/tls-cert.pem
   { set +x; } 2>/dev/null
-
+#
   infoln "Register the org admin"
   set -x
   fabric-ca-client register --caname ca-org1 --id.name org1admin --id.secret org1adminpw --id.type admin ###--tls.certfiles ${PWD}/crypto-config/fabric-ca/org1/tls-cert.pem
@@ -55,6 +42,12 @@ function createOrg1() {
   set -x
   fabric-ca-client enroll -u http://peer0:peer0pw@localhost:7054 --caname ca-org1 -M ${PWD}/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp --csr.hosts peer0.org1.example.com ###--tls.certfiles ${PWD}/crypto-config/fabric-ca/org1/tls-cert.pem
   { set +x; } 2>/dev/null
+
+  echo 'NodeOUs:
+    Enable: true
+    PeerOUIdentifier:
+      Certificate: cacerts/localhost-7054-ca-org1.pem
+      OrganizationalUnitIdentifier: peer' >${PWD}/crypto-config/peerOrganizations/org1.example.com/msp/config.yaml
 
   cp ${PWD}/crypto-config/peerOrganizations/org1.example.com/msp/config.yaml ${PWD}/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp/config.yaml
 
@@ -84,6 +77,12 @@ function createOrg1() {
   fabric-ca-client enroll -u http://user1:user1pw@localhost:7054 --caname ca-org1 -M ${PWD}/crypto-config/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp ###--tls.certfiles ${PWD}/crypto-config/fabric-ca/org1/tls-cert.pem
   { set +x; } 2>/dev/null
 
+  echo 'NodeOUs:
+    Enable: true
+    ClientOUIdentifier:
+      Certificate: cacerts/localhost-7054-ca-org1.pem
+      OrganizationalUnitIdentifier: client' >${PWD}/crypto-config/peerOrganizations/org1.example.com/msp/config.yaml
+
   cp ${PWD}/crypto-config/peerOrganizations/org1.example.com/msp/config.yaml ${PWD}/crypto-config/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/config.yaml
 
   mkdir -p crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com
@@ -93,8 +92,28 @@ function createOrg1() {
   fabric-ca-client enroll -u http://org1admin:org1adminpw@localhost:7054 --caname ca-org1 -M ${PWD}/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp ###--tls.certfiles ${PWD}/crypto-config/fabric-ca/org1/tls-cert.pem
   { set +x; } 2>/dev/null
 
+  echo 'NodeOUs:
+    Enable: true
+    AdminOUIdentifier:
+      Certificate: cacerts/localhost-7054-ca-org1.pem
+      OrganizationalUnitIdentifier: admin' >${PWD}/crypto-config/peerOrganizations/org1.example.com/msp/config.yaml
+
   cp ${PWD}/crypto-config/peerOrganizations/org1.example.com/msp/config.yaml ${PWD}/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/config.yaml
 
+  echo 'NodeOUs:
+  Enable: true
+    ClientOUIdentifier:
+      Certificate: cacerts/localhost-7054-ca-org1.pem
+      OrganizationalUnitIdentifier: client
+    PeerOUIdentifier:
+      Certificate: cacerts/localhost-7054-ca-org1.pem
+      OrganizationalUnitIdentifier: peer
+    AdminOUIdentifier:
+      Certificate: cacerts/localhost-7054-ca-org1.pem
+      OrganizationalUnitIdentifier: admin
+    OrdererOUIdentifier:
+      Certificate: cacerts/localhost-7054-ca-org1.pem
+      OrganizationalUnitIdentifier: orderer' >${PWD}/crypto-config/peerOrganizations/org1.example.com/msp/config.yaml
 }
 
 function createOrg2() {
